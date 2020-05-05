@@ -1,26 +1,33 @@
+import 'package:flood_it/Game.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
 import 'Board.dart';
 import 'ColorPickerBar.dart';
 
-void main() => runApp(MaterialApp(home: FloodIt()));
+void main() => runApp(FloodIt());
 
-class FloodIt extends StatefulWidget {
-  final int rowlength;
-
-  FloodIt({this.rowlength});
-
+class FloodIt extends StatelessWidget {
   @override
-  _FloodItState createState() => _FloodItState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Game(),
+    );
+  }
 }
 
-class _FloodItState extends State<FloodIt> {
+class Game extends StatefulWidget {
+  @override
+  _GameState createState() => _GameState();
+}
+
+class _GameState extends State<Game> {
   updateBoard(MaterialColor color) {
-    print(color);
+    gameState.makeMove(color);
   }
 
-  final List<MaterialColor> colors = const [
+  static int rowLength = 7;
+  static List<MaterialColor> colors = [
     Colors.green,
     Colors.blue,
     Colors.red,
@@ -28,18 +35,20 @@ class _FloodItState extends State<FloodIt> {
     Colors.orange,
     Colors.purple
   ];
-
   Random random = Random();
+
+  GameState gameState = new GameState(rowLength: rowLength, colors: colors);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("01/15"),
+        title: Text(
+            "${gameState.moves.toString()}/${gameState.maxMoves.toString()}"),
       ),
-      body: Board(colors: colors, random: random),
+      body: Board(gameState: gameState),
       bottomNavigationBar:
-          ColorPickerBar(colors: colors, updateBoard: updateBoard),
+          ColorPickerBar(colors: gameState.colors, updateBoard: updateBoard),
     );
   }
 }

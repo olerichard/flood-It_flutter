@@ -1,25 +1,29 @@
-import 'dart:math';
-
+import 'package:flood_it/Game.dart';
 import 'package:flutter/material.dart';
 
 class Board extends StatelessWidget {
-  const Board({this.colors, this.random});
+  const Board({this.gameState});
 
-  final List<MaterialColor> colors;
-  final Random random;
+  final GameState gameState;
 
   @override
   Widget build(BuildContext context) {
     return GridView.count(
-      crossAxisSpacing: 0,
-      mainAxisSpacing: 0,
-      crossAxisCount: 7,
-      children: <Widget>[
-        for (var i = 0; i < (63); i++)
-          Container(
-            color: colors[random.nextInt(6)],
-          ),
-      ],
-    );
+        crossAxisSpacing: 0,
+        mainAxisSpacing: 0,
+        crossAxisCount: gameState.rowLength,
+        children: gameState.board.expand((row) {
+          return row.tiles;
+        }).map((tile) {
+          return _createTile(tile.color);
+        }).toList());
   }
+}
+
+Widget _createTile(MaterialColor color) {
+  return Container(
+    color: color,
+    padding: EdgeInsets.all(0.0),
+    margin: EdgeInsets.all(0.0),
+  );
 }
