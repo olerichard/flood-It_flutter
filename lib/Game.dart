@@ -28,9 +28,14 @@ class GameState {
 
       board.add(row);
     }
+
+    board[0].tiles[0].collected = true;
+    board = calculateMove(board, board[0].tiles[0].color);
   }
 
   void makeMove(MaterialColor color) {
+    if (scoreResult != VictoryConditions.RUNNING) return;
+
     board = calculateMove(board, color);
     moves++;
     scoreResult = score();
@@ -75,8 +80,19 @@ class GameState {
     return newBoard;
   }
 
+  String getGameStateText() {
+    switch (scoreResult) {
+      case VictoryConditions.WINNER:
+        return 'You Won';
+      case VictoryConditions.LOST:
+        return 'You Lost';
+      default:
+        return 'running';
+    }
+  }
+
   VictoryConditions score() {
-    if (checkWinner() && moves >= maxMoves) return VictoryConditions.WINNER;
+    if (checkWinner() && moves <= maxMoves) return VictoryConditions.WINNER;
 
     if (moves == maxMoves) return VictoryConditions.LOST;
 

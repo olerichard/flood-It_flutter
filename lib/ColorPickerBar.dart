@@ -10,15 +10,14 @@ class ColorPickerBar extends StatelessWidget {
     return ButtonBar(
         buttonMinWidth: 55.0,
         alignment: MainAxisAlignment.center,
-        children: <Widget>[
-          for (var color in colors)
-            FlatButton(
+        children: colors
+            .map((color) => FlatButton(
                 color: color,
                 shape: CircleBorder(),
                 onPressed: () {
                   updateBoard(color);
                 },
-                child: Text("")),
-        ]);
+                child: Text("")))
+            .toList());
   }
 }

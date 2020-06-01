@@ -23,7 +23,9 @@ class Game extends StatefulWidget {
 
 class _GameState extends State<Game> {
   updateBoard(MaterialColor color) {
-    gameState.makeMove(color);
+    setState(() {
+      gameState.makeMove(color);
+    });
   }
 
   static int rowLength = 7;
@@ -45,6 +47,18 @@ class _GameState extends State<Game> {
       appBar: AppBar(
         title: Text(
             "${gameState.moves.toString()}/${gameState.maxMoves.toString()}"),
+        actions: <Widget>[
+          Text("${gameState.getGameStateText()}"),
+          FlatButton(
+              color: Colors.blue,
+              onPressed: () {
+                setState(() {
+                  gameState =
+                      new GameState(rowLength: rowLength, colors: colors);
+                });
+              },
+              child: Text("Reset"))
+        ],
       ),
       body: Board(gameState: gameState),
       bottomNavigationBar:
